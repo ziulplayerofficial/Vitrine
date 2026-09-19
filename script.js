@@ -236,6 +236,7 @@ function openProductModal(card) {
   const installments = card.getAttribute('data-installments') || card.querySelector('.product-installments')?.textContent || 'em até 3x sem juros';
   const shopeeLink = card.getAttribute('data-shopee') || card.querySelector('.btn-shopee')?.getAttribute('href') || '';
   const tiktokLink = card.getAttribute('data-tiktok') || card.querySelector('.btn-tiktok')?.getAttribute('href') || '';
+  const mlLink = card.getAttribute('data-mercadolivre') || card.getAttribute('data-ml') || card.querySelector('.btn-mercadolivre')?.getAttribute('href') || '';
 
   // Coleta as fotos do produto (foto 1, foto 2 e data-images extras se existirem)
   const img1 = card.querySelector('.img-primary')?.src || '';
@@ -312,13 +313,15 @@ function openProductModal(card) {
     }
   }
 
-  // Preenche os botões de compra (Shopee e TikTok)
-  // Regra do item 9 e 15: Mostra apenas se o link existir, sem espaços vazios!
+  // Preenche os botões de compra (Shopee, TikTok e Mercado Livre)
+  // Regra: Mostra apenas se o link existir, sem espaços vazios!
   const shopeeBtn = document.getElementById('modal-btn-shopee');
   const tiktokBtn = document.getElementById('modal-btn-tiktok');
+  const mlBtn = document.getElementById('modal-btn-mercadolivre');
 
   const validShopee = shopeeLink && shopeeLink !== '#' && !shopeeLink.includes('LINK_DA_SHOPEE');
   const validTiktok = tiktokLink && tiktokLink !== '#' && !tiktokLink.includes('LINK_DO_TIKTOK');
+  const validMl = mlLink && mlLink !== '#' && !mlLink.includes('LINK_DO_MERCADO_LIVRE');
 
   if (shopeeBtn) {
     if (validShopee) {
@@ -326,6 +329,15 @@ function openProductModal(card) {
       shopeeBtn.href = shopeeLink;
     } else {
       shopeeBtn.style.display = 'none';
+    }
+  }
+
+  if (mlBtn) {
+    if (validMl) {
+      mlBtn.style.display = 'inline-flex';
+      mlBtn.href = mlLink;
+    } else {
+      mlBtn.style.display = 'none';
     }
   }
 
@@ -341,7 +353,7 @@ function openProductModal(card) {
   // Se nenhum link estiver configurado, exibe botão informativo
   const fallbackBtn = document.getElementById('modal-btn-fallback');
   if (fallbackBtn) {
-    if (!validShopee && !validTiktok) {
+    if (!validShopee && !validTiktok && !validMl) {
       fallbackBtn.style.display = 'inline-flex';
     } else {
       fallbackBtn.style.display = 'none';
